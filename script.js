@@ -3,31 +3,33 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function handleImageUpload() {
-    const imageUrls = document.getElementById("imageUrls").value
-        .split("\n")
-        .map(url => url.trim())
-        .filter(url => url);
-
+    const fileInput = document.getElementById("imageInput");
+    const files = fileInput.files;
     const productList = document.getElementById("productList");
+
     productList.innerHTML = "";
 
-    imageUrls.forEach((url, index) => {
-        const productDiv = document.createElement("div");
-        productDiv.className = "product";
+    Array.from(files).forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const productDiv = document.createElement("div");
+            productDiv.className = "product";
 
-        const img = document.createElement("img");
-        img.src = url;
-        img.alt = "Produs";
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.alt = "Produs";
 
-        const input = document.createElement("input");
-        input.type = "number";
-        input.min = "0";
-        input.placeholder = "Cantitate";
-        input.dataset.id = index;
+            const input = document.createElement("input");
+            input.type = "number";
+            input.min = "0";
+            input.placeholder = "Cantitate";
+            input.dataset.id = index;
 
-        productDiv.appendChild(img);
-        productDiv.appendChild(input);
-        productList.appendChild(productDiv);
+            productDiv.appendChild(img);
+            productDiv.appendChild(input);
+            productList.appendChild(productDiv);
+        };
+        reader.readAsDataURL(file);
     });
 }
 
