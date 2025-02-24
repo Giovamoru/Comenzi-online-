@@ -8,3 +8,17 @@
         color: #333;
     }
     ```
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+    text-align: center; /* Centrează textul în interiorul body-ului */
+}
+
+h1 {
+    color: #333;
+    font-size: 3em; /* Face titlul mai mare */
+    margin: 0; /* Elimină marginile implicite */
+    padding: 20px 0; /* Adaugă spațiu deasupra și dedesubtul titlului */
+}
