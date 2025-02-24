@@ -8,10 +8,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>Adaugă imagini și selectează cantitățile</h1>
-        <textarea id="imageUrls" placeholder="Adaugă link-urile imaginilor, fiecare pe un rând"></textarea>
+        <h1>Încarcă poze și selectează cantitățile</h1>
+        <input type="file" id="imageInput" multiple accept="image/*">
         <button onclick="handleImageUpload()">Încarcă Imagini</button>
-        
+
         <div id="productList" class="grid"></div>
 
         <button onclick="generatePDF()">Generează PDF</button>
