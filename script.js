@@ -1,59 +1,61 @@
-document.addEventListener("DOMContentLoaded", () => {
-    window.jsPDF = window.jspdf.jsPDF;
-});
+// script.js
 
-function handleImageUpload() {
-    const fileInput = document.getElementById("imageInput");
-    const files = fileInput.files;
-    const productList = document.getElementById("productList");
+document.addEventListener("DOMContentLoaded", function () {
+  const imageUpload = document.getElementById("imageUpload");
+  const generatePDF = document.getElementById("generatePDF");
 
-    productList.innerHTML = "";
+  if (imageUpload) {
+    imageUpload.addEventListener("change", function (event) {
+      const files = Array.from(event.target.files);
+      const imageContainer = document.getElementById("imageContainer");
+      imageContainer.innerHTML = ""; // Curăță containerul pentru imagini noi
 
-    Array.from(files).forEach((file, index) => {
+      files.forEach((file) => {
         const reader = new FileReader();
         reader.onload = function (e) {
-            const productDiv = document.createElement("div");
-            productDiv.className = "product";
+          const imageDiv = document.createElement("div");
+          imageDiv.className = "image-item";
 
-            const img = document.createElement("img");
-            img.src = e.target.result;
-            img.alt = "Produs";
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.alt = "Produs";
+          img.className = "preview-image";
 
-            const input = document.createElement("input");
-            input.type = "number";
-            input.min = "0";
-            input.placeholder = "Cantitate";
-            input.dataset.id = index;
+          const input = document.createElement("input");
+          input.type = "number";
+          input.placeholder = "Cantitate";
+          input.className = "quantity-input";
+          input.min = "0";
 
-            productDiv.appendChild(img);
-            productDiv.appendChild(input);
-            productList.appendChild(productDiv);
+          imageDiv.appendChild(img);
+          imageDiv.appendChild(input);
+          imageContainer.appendChild(imageDiv);
         };
         reader.readAsDataURL(file);
+      });
     });
-}
+  }
 
-function generatePDF() {
-    const doc = new jsPDF();
-    let y = 10;
-    const inputs = document.querySelectorAll(".product input");
+  if (generatePDF) {
+    generatePDF.addEventListener("click", function () {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      let y = 10;
 
-    inputs.forEach(input => {
-        const quantity = input.value;
-        if (quantity > 0) {
-            const imgElement = input.parentElement.querySelector("img");
-            const imgUrl = imgElement.src;
+      document.querySelectorAll(".image-item").forEach((item) => {
+        const imgElement = item.querySelector("img");
+        const quantity = item.querySelector("input").value || "0";
+        const imgData = imgElement.src;
 
-            doc.addImage(imgUrl, "JPEG", 10, y, 50, 50);
-            doc.text(`Cantitate: ${quantity}`, 10, y + 55);
-            y += 70;
-
-            if (y > 250) {
-                doc.addPage();
-                y = 10;
-            }
+        doc.addImage(imgData, "JPEG", 10, y, 180, 100);
+        doc.text(`Cantitate: ${quantity}`, 10, y + 105);
+        y += 120;
+        if (y > 250) {
+          doc.addPage();
+          y = 10;
         }
+      });
+      doc.save("comanda.pdf");
     });
-
-    doc.save("comanda.pdf");
-}
+  }
+});
