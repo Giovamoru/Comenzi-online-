@@ -5,12 +5,19 @@ document.addEventListener("DOMContentLoaded", function () {
   const generatePDF = document.getElementById("generatePDF");
 
   if (imageUpload) {
+    imageUpload.setAttribute("multiple", "true"); // Permite selectarea mai multor fișiere
+    imageUpload.accept = "image/*"; // Acceptă doar imagini
+
     imageUpload.addEventListener("change", function (event) {
       const files = Array.from(event.target.files);
       const imageContainer = document.getElementById("imageContainer");
       imageContainer.innerHTML = ""; // Curăță containerul pentru imagini noi
 
+      if (files.length === 0) return;
+
       files.forEach((file) => {
+        if (!file.type.startsWith("image/")) return;
+
         const reader = new FileReader();
         reader.onload = function (e) {
           const imageDiv = document.createElement("div");
